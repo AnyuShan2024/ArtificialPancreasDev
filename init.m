@@ -21,13 +21,13 @@ basal_data = [0, U_b0; 1440*5, U_b0];
 % ===== Input Definition =====
 
 % insulin dosage are all given in mU
-bolus_data = [0, 0; 119, 0; 120, 2e3; 121, 0; 1440*5, 0];
+bolus_data = ConvertPWL([120], [2e3]);
 
 % glucagon dosage are all given in pg
-glucagon_data = [0, 0; 359, 0; 360, 1e8; 361, 0; 1440*5, 0];
+glucagon_data = ConvertPWL([360], [1e8]);
 
 % CHO intake are defined in grams of glucose intake
-CHO_data = [0, 0; 119, 0; 120, 40; 121, 0; 1440*5, 0];
+CHO_data = ConvertPWL([120], [40]);
 
 function LoadVP(dir)
 % This function reads Virtual Patient Parameters from cohort and load

@@ -1,3 +1,13 @@
+%% ===== Simulation Setup =====
+
+% Definition of session time
+
+start_time = datetime(2025, 1, 21, 6, 30, 0); % Format: year, month, day, hour, minute, second
+end_time = datetime(2025, 1, 21, 23, 15, 0);  % Example: Same day, different time
+
+% Calculate the duration between the times
+t_sim = minutes(end_time - start_time);
+
 %% ===== Patient Parameters =====
 
 % Constants for patient simulation is loaded here
@@ -18,7 +28,7 @@ U_b0 = fzero(f, 10);
 
 basal_data = [0, U_b0; 1440*5, U_b0];
 
-% ===== Input Definition =====
+%% ===== Input Definition =====
 
 % insulin dosage are all given in mU
 bolus_data = ConvertPWL([120], [2e3]);

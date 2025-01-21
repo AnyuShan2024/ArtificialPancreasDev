@@ -1,9 +1,12 @@
-function randomizeVP()
+function [values, names] = randomizeVP()
     [values_glucagon, names_glucagon] = glucagonEstim(false);
     [values_insulin, names_insulin] = insulinEstim();
     % 
     baseWrite(values_glucagon, names_glucagon)
     baseWrite(values_insulin, names_insulin)
+
+    values = [values_glucagon, values_insulin];
+    names = [names_glucagon, names_insulin];
 end
 
 function [values, names] = glucagonEstim(dispFlag)

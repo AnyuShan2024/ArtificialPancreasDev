@@ -6,10 +6,15 @@ clc;
 % Definition of session time
 
 start_time = datetime(2025, 1, 21, 0, 30, 0); % Format: year, month, day, hour, minute, second
-end_time = datetime(2025, 1, 22, 23, 30, 0);  % Example: Same day, different time
+end_time = datetime(2025, 1, 21, 23, 30, 0);  % Example: Same day, different time
 
 % Calculate the duration between the times
 t_sim = minutes(end_time - start_time);
+
+%% ===== Sensor & Actuator Definition =====
+
+T_CGM = 5;              % Sampling period of CGM sensor (min)
+sig_n = 10;             % Noise in CGM measurement, assuming Gaussian (mg/dL)
 
 %% ===== Patient Parameters =====
 
@@ -18,11 +23,13 @@ W = 70;                 % Body weigh of patient (kg)
 M_g = 180.16;           % Molecular weight of glucose (g mol^{-1})
 G_GNG = 6;              % Glucose production due to gluconeogenesis (umol/kg/min)
 BG_0 = 100;             % Initial condition for blood glucose level (mg/dL)
-sig_n = 10;             % Noise in CGM measurement, assuming Gaussian (mg/dL)
 
 % Read from virtual patient presets and load
 dirVP = 'presets\virtual_patients.mat';
 LoadVP(dirVP);
+
+% The blood-to-interstitial transfer coeffecient is overidden here
+k_bi = rand*0.05+0.075;
 
 % Solve for basal insulin required to maintain steady-state blood glucose
 G_GG0 = C_b/(C_b+C_E50)*(E_max-G_GNG);
@@ -37,6 +44,8 @@ control_flag = false;
 prandial_flag = true;
 
 if control_flag
+    t_sim = 720;
+
     % insulin dosage are all given in mU
     bolus_data = ConvertPWL([120], [2e3]);
     

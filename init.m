@@ -16,6 +16,8 @@ t_sim = minutes(end_time - start_time);
 T_CGM = 5;              % Sampling period of CGM sensor (min)
 sig_n = 10;             % Noise in CGM measurement, assuming Gaussian (mg/dL)
 
+T_CTRL = 5;             % Update period of AP controller (min)
+
 %% ===== Patient Parameters =====
 
 % Constants for patient simulation is loaded here
@@ -62,7 +64,7 @@ else
     if prandial_flag
         ICR = 1e3/15; % Insulin-CHO ratio assumed to be 1000mU per 15g CHO
         bolus_amount = CHO_amount.*(1+0.1*randn(size(CHO_amount)))*ICR;
-        bolus_data = ConvertPWL(CHO_time, bolus_amount);
+        bolus_data = ConvertZOH(CHO_time, bolus_amount, T_CTRL);
     else
         bolus_data = [0, 0; 1e6, 0];
     end

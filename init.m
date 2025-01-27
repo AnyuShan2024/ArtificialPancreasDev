@@ -16,7 +16,11 @@ t_sim = minutes(end_time - start_time);
 T_CGM = 5;              % Sampling period of CGM sensor (min)
 sig_n = 10;             % Noise in CGM measurement, assuming Gaussian (mg/dL)
 
+%% ===== Controller Parameters =====
+
 T_CTRL = 5;             % Update period of AP controller (min)
+
+load("presets\nn_reconstructor.mat");
 
 %% ===== Patient Parameters =====
 

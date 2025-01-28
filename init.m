@@ -66,7 +66,7 @@ else
     CHO_data = ConvertPWL(CHO_time, CHO_amount);
 
     if prandial_flag
-        ICR = 1e3/15; % Insulin-CHO ratio assumed to be 1000mU per 15g CHO
+        ICR = 1.5e3/15; % Insulin-CHO ratio assumed to be 1000mU per 15g CHO
         bolus_amount = CHO_amount.*(1+0.1*randn(size(CHO_amount)))*ICR;
         bolus_data = ConvertZOH(CHO_time, bolus_amount, T_CTRL);
     else
@@ -76,6 +76,16 @@ else
     glucagon_data = [0, 0; 1e6, 0];
 end
 
+%% ===== Evaluator Settings =====
+
+Hypo_Threshold = 70;
+Hyper_Threshold = 180;
+
+Hypo_Hyst_L = (Hypo_Threshold-10)/18;
+Hypo_Hyst_H = (Hypo_Threshold+10)/18;
+
+Hyper_Hyst_L = (Hyper_Threshold - 10)/18;
+Hyper_Hyst_H = (Hyper_Threshold + 10)/18;
 
 %% ===== Auxilary Functions =====
 

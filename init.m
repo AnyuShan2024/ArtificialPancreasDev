@@ -22,6 +22,10 @@ T_CTRL = 5;             % Update period of AP controller (min)
 
 load("presets\nn_reconstructor.mat");
 
+K_d = 1; 
+K_p = 1; 
+K_i = 1; 
+
 %% ===== Patient Parameters =====
 
 % Constants for patient simulation is loaded here
@@ -43,6 +47,9 @@ f = @(x) -F_01 - x/(k_e*V_I*W)*S_T*(1-k_12/(k_12+x/(k_e*V_I*W)*S_D))*(BG_0*V_G/1
 U_b0 = fzero(f, 10);
 
 basal_data = [0, U_b0; 1440*5, U_b0];
+
+%Goal Blood glucose value 
+BG_setpoint = 100; %mg/dL 
 
 %% ===== Input Definition =====
 

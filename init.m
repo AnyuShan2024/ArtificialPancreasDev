@@ -22,9 +22,11 @@ T_CTRL = 5;             % Update period of AP controller (min)
 
 load("presets\nn_reconstructor.mat");
 
-K_d = 1; 
-K_p = 1; 
-K_i = 1; 
+K_d = 10; 
+K_p = 1.2; 
+K_i = 0; 
+
+glucagon_dose = 100; 
 
 %% ===== Patient Parameters =====
 

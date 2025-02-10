@@ -22,11 +22,11 @@ T_CTRL = 5;             % Update period of AP controller (min)
 
 load("presets\nn_reconstructor.mat");
 
-K_d = 10; 
+K_d = 70; 
 K_p = 1.2; 
 K_i = 0; 
 
-glucagon_dose = 100; 
+glucagon_dose = 1e8; 
 
 %% ===== Patient Parameters =====
 
@@ -34,7 +34,7 @@ glucagon_dose = 100;
 W = 70;                 % Body weigh of patient (kg)
 M_g = 180.16;           % Molecular weight of glucose (g mol^{-1})
 G_GNG = 6;              % Glucose production due to gluconeogenesis (umol/kg/min)
-BG_0 = 100;             % Initial condition for blood glucose level (mg/dL)
+BG_0 = 120;             % Initial condition for blood glucose level (mg/dL)
 
 % Read from virtual patient presets and load
 dirVP = 'presets\virtual_patients.mat';
@@ -55,14 +55,17 @@ BG_setpoint = 100; %mg/dL
 
 %% ===== Input Definition =====
 
-control_flag = false;
+% control_flag turns on / off the random meal inputs 
+% prandial flag is related to the bolus data which is disconnected 
+control_flag = true;
 prandial_flag = true;
 
 if control_flag
     t_sim = 720;
 
     % insulin dosage are all given in mU
-    bolus_data = ConvertPWL([120], [2e3]);
+    % 
+     bolus_data = ConvertPWL([120], [2e3]);
     
     % glucagon dosage are all given in pg
     glucagon_data = ConvertPWL([360], [1e8]);

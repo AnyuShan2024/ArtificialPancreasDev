@@ -22,8 +22,8 @@ T_CTRL = 5;             % Update period of AP controller (min)
 
 load("presets\nn_reconstructor.mat");
 
-K_d = 70; 
-K_p = 1.2; 
+K_d = 10; 
+K_p = 0.3; 
 K_i = 0; 
 
 glucagon_dose = 1e8; 
@@ -57,7 +57,7 @@ BG_setpoint = 100; %mg/dL
 
 % control_flag turns on / off the random meal inputs 
 % prandial flag is related to the bolus data which is disconnected 
-control_flag = true;
+control_flag = false;
 prandial_flag = true;
 
 if control_flag

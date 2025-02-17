@@ -26,7 +26,7 @@ K_d = 10;
 K_p = 0.3; 
 K_i = 0; 
 
-glucagon_dose = 1e8; 
+glucagon_dose = 1e7; 
 
 %% ===== Patient Parameters =====
 

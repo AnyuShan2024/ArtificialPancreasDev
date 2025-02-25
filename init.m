@@ -20,7 +20,12 @@ sig_n = 10;             % Noise in CGM measurement, assuming Gaussian (mg/dL)
 
 T_CTRL = 5;             % Update period of AP controller (min)
 
-load("presets\nn_reconstructor.mat");
+%% Load the Data
+[ArtificialPancreas, ~, ~] = fileparts(mfilename('fullpath'));
+%cd(ArtificialPancreas)
+%data_pathname=[ArtificialPancreas, filesep, 'presets'];
+load([ArtificialPancreas, '/presets/nn_reconstructor.mat'])
+%load("presets\nn_reconstructor.mat");
 
 K_d = 10; 
 K_p = 0.3; 
@@ -37,7 +42,7 @@ G_GNG = 6;              % Glucose production due to gluconeogenesis (umol/kg/min
 BG_0 = 120;             % Initial condition for blood glucose level (mg/dL)
 
 % Read from virtual patient presets and load
-dirVP = 'presets\virtual_patients.mat';
+dirVP = [ArtificialPancreas,'/presets/virtual_patients.mat'];
 LoadVP(dirVP);
 
 % The blood-to-interstitial transfer coeffecient is overidden here

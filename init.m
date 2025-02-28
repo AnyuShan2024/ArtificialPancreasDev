@@ -6,7 +6,7 @@ clc;
 % Definition of session time
 
 start_time = datetime(2025, 1, 21, 0, 30, 0); % Format: year, month, day, hour, minute, second
-end_time = datetime(2025, 1, 21, 23, 30, 0);  % Example: Same day, different time
+end_time = datetime(2025, 1, 23, 23, 30, 0);  % Example: Same day, different time
 
 % Calculate the duration between the times
 t_sim = minutes(end_time - start_time);
@@ -75,7 +75,7 @@ if control_flag
 else
     % Randomize and construct meal disturbances
     [CHO_time, CHO_amount] = DietGen(start_time, end_time);
-    CHO_data = ConvertPWL(CHO_time, CHO_amount);
+    CHO_data = CHO2PWL(CHO_time, CHO_amount, 4.5);
 
     if prandial_flag
         ICR = 1.5e3/15; % Insulin-CHO ratio assumed to be 1000mU per 15g CHO

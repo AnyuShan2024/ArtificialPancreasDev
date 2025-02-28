@@ -34,7 +34,7 @@ end
 function [meal_times, meal_amounts] = generate_meal_pattern()
     % Generate random meal times
     meal_times = [8; 13; 18; 22]*60; % Times in minutes from midnight (8 AM, 1 PM, 6 PM, 10PM)
-    meal_times = meal_times + randn(length(meal_times), 1)*30; % Add variability to meal time
+    meal_times = meal_times + randn(length(meal_times), 1)*10; % Add variability to meal time
 
     % Generate randome meal amounts
     meal_amounts = [

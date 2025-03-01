@@ -66,7 +66,7 @@ control_flag = false;
 prandial_flag = true;
 
 if control_flag
-    t_sim = 1200;
+    t_sim = 2000;
 
     % insulin dosage are all given in mU
     % 

@@ -80,7 +80,7 @@ function loss = compute_loss(glucose_values)
 
     % Step 3: Compute penalty loss
     alpha = 1.0;  % Weight for hypoglycemia penalty
-    beta = 0.4;   % Weight for hyperglycemia penalty
+    beta = 0.8;   % Weight for hyperglycemia penalty
     loss = alpha * max(70 - G_min, 0) + beta * max(G_max - 180, 0);
 
     % Print results for debugging

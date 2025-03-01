@@ -1,12 +1,12 @@
-clear;
-clc;
+% clear;
+% clc;
 
 %% ===== Simulation Setup =====
 
 % Definition of session time
 
 start_time = datetime(2025, 1, 21, 0, 30, 0); % Format: year, month, day, hour, minute, second
-end_time = datetime(2025, 1, 23, 23, 30, 0);  % Example: Same day, different time
+end_time = datetime(2025, 1, 21, 23, 30, 0);  % Example: Same day, different time
 
 % Calculate the duration between the times
 t_sim = minutes(end_time - start_time);
@@ -15,18 +15,6 @@ t_sim = minutes(end_time - start_time);
 
 T_CGM = 5;              % Sampling period of CGM sensor (min)
 sig_n = 10;             % Noise in CGM measurement, assuming Gaussian (mg/dL)
-
-%% ===== Controller Parameters =====
-
-T_CTRL = 5;             % Update period of AP controller (min)
-
-load("presets\nn_reconstructor.mat");
-
-K_d = 10; 
-K_p = 0.3; 
-K_i = 0; 
-
-glucagon_dose = 1e7; 
 
 %% ===== Patient Parameters =====
 
@@ -53,6 +41,23 @@ basal_data = [0, U_b0; 1440*5, U_b0];
 %Goal Blood glucose value 
 BG_setpoint = 100; %mg/dL 
 
+%% ===== Safety Parameters =====
+
+TDD_limit = 0.6*W*1000; % total daily dosage limit, in mU of insulin
+
+
+%% ===== Controller Parameters =====
+
+T_CTRL = 5;             % Update period of AP controller (min)
+
+load("presets\nn_reconstructor.mat");
+
+K_d = 17.17; 
+K_p = 0.4532; 
+K_i = 0; 
+
+glucagon_dose = 1e7; 
+
 %% ===== Input Definition =====
 
 % control_flag turns on / off the random meal inputs 
@@ -61,14 +66,14 @@ control_flag = false;
 prandial_flag = true;
 
 if control_flag
-    t_sim = 720;
+    t_sim = 1200;
 
     % insulin dosage are all given in mU
     % 
-     bolus_data = ConvertPWL([120], [2e3]);
+     bolus_data = ConvertPWL([120], [1.3e3]);
     
     % glucagon dosage are all given in pg
-    glucagon_data = ConvertPWL([360], [1e8]);
+    glucagon_data = ConvertPWL([100], [0]);
     
     % CHO intake are defined in grams of glucose intake
     CHO_data = ConvertPWL([120], [40]);

@@ -53,8 +53,8 @@ T_CTRL = 5;             % Update period of AP controller (min)
 
 load("presets\nn_reconstructor.mat");
 
-K_d = 17.17; 
-K_p = 0.4532; 
+K_d = 379.0122/ICR -5.8677;
+K_p = 0.1; 
 K_i = 0; 
 
 glucagon_dose = 1e7; 
@@ -84,7 +84,7 @@ else
     CHO_data = CHO2PWL(CHO_time, CHO_amount, 4.5);
 
     if prandial_flag
-        ICR = 1.5e3/15; % Insulin-CHO ratio assumed to be 1000mU per 15g CHO
+        ICR = 1e3/ICR; % Insulin-CHO ratio assumed to be 1000mU per 15g CHO
         bolus_amount = CHO_amount.*(1+0.1*randn(size(CHO_amount)))*ICR;
         bolus_data = ConvertZOH(CHO_time, bolus_amount, T_CTRL);
     else

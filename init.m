@@ -63,22 +63,24 @@ glucagon_dose = 1e7;
 
 % control_flag turns on / off the random meal inputs 
 % prandial flag is related to the bolus data which is disconnected 
-control_flag = false;
+control_flag = true;
 announcement_ratio = 0.8;
 announcement_std = 3;
 
 if control_flag
-    t_sim = 2000;
+    t_sim = 1800;
 
     % insulin dosage are all given in mU
     % 
-    bolus_data = ConvertPWL([120], [1.3e3]);
+    bolus_data = ConvertZOH([120], [80/ICR*1e3], T_CTRL);
     
     % glucagon dosage are all given in pg
-    glucagon_data = ConvertPWL([100], [0]);
+    glucagon_data = ConvertZOH([480], [5e7],T_CTRL);
     
     % CHO intake are defined in grams of glucose intake
-    CHO_data = ConvertPWL([120], [40]);
+    CHO_data = CHO2PWL([120], [80], 4.5);
+
+    Announcements = [0, 0; 1e6, 0];
 else
     % Randomize and construct meal disturbances
     [CHO_time, CHO_amount] = DietGen(start_time, end_time);

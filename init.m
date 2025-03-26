@@ -53,11 +53,15 @@ T_CTRL = 5;             % Update period of AP controller (min)
 
 load("presets\nn_reconstructor.mat");
 
-K_d = 379.0122/ICR -5.8677;
-K_p = 0.1; 
-K_i = 0; 
+K_d_ins = 379.0122/ICR -5.8677;
+K_p_ins = 0.1;
+K_i_ins = 0; 
 
 glucagon_dose = 1e7; 
+
+K_d_glu = 1; 
+K_p_glu = 1; 
+K_i_glu =1; 
 
 %% ===== Input Definition =====
 

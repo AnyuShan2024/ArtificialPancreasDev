@@ -59,7 +59,7 @@ K_i_ins = 0;
 
 glucagon_dose = 1e7; 
 
-K_d_glu = 26.23; 
+K_d_glu = 50; 
 K_p_glu = 0.1; 
 K_i_glu = 0; 
 
@@ -67,7 +67,7 @@ K_i_glu = 0;
 
 % control_flag turns on / off the random meal inputs 
 % prandial flag is related to the bolus data which is disconnected 
-control_flag = false;
+control_flag = true;
 announcement_ratio = 0.8;
 announcement_std = 3;
 

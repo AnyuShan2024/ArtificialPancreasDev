@@ -1,5 +1,5 @@
-% clear;
-% clc;
+clear;
+clc;
 test = 10;
 
 %% ===== Simulation Setup =====
@@ -53,44 +53,65 @@ T_CTRL = 5;             % Update period of AP controller (min)
 
 load("presets\nn_reconstructor.mat");
 
-K_d = 17.17; 
-K_p = 0.4532; 
-K_i = 0; 
+K_d_ins = 379.0122/ICR -5.8677;
+K_p_ins = 0.1;
+K_i_ins = 0; 
 
 glucagon_dose = 1e7; 
+
+K_d_glu = 2; 
+K_p_glu = 0.1; 
+K_i_glu = 0; 
 
 %% ===== Input Definition =====
 
 % control_flag turns on / off the random meal inputs 
 % prandial flag is related to the bolus data which is disconnected 
 control_flag = false;
-prandial_flag = true;
+announcement_ratio = 0.8;
+announcement_std = 3;
 
 if control_flag
-    t_sim = 2000;
+    t_sim = 1800;
 
     % insulin dosage are all given in mU
     % 
-     bolus_data = ConvertPWL([120], [1.3e3]);
+    bolus_data = ConvertZOH([120], [80/ICR*1e3], T_CTRL);
     
     % glucagon dosage are all given in pg
-    glucagon_data = ConvertPWL([100], [0]);
+    glucagon_data = ConvertZOH([480], [5e7],T_CTRL);
     
     % CHO intake are defined in grams of glucose intake
-    CHO_data = ConvertPWL([120], [40]);
+    CHO_data = CHO2PWL([120], [80], 4.5);
+
+    Announcements = [0, 0; 1e6, 0];
 else
     % Randomize and construct meal disturbances
     [CHO_time, CHO_amount] = DietGen(start_time, end_time);
     CHO_data = CHO2PWL(CHO_time, CHO_amount, 4.5);
 
-    if prandial_flag
-        ICR = 1.5e3/15; % Insulin-CHO ratio assumed to be 1000mU per 15g CHO
-        bolus_amount = CHO_amount.*(1+0.1*randn(size(CHO_amount)))*ICR;
-        bolus_data = ConvertZOH(CHO_time, bolus_amount, T_CTRL);
-    else
-        bolus_data = [0, 0; 1e6, 0];
+    % Corrupt CHO amount with announcement error and possibility of
+    % unannouced meal.
+    Announcement_data = max(0, CHO_amount+announcement_std*randn(size(CHO_amount)));
+    Announcement_mask = rand(size(Announcement_data))<announcement_ratio;
+    Announcement_data = Announcement_data(Announcement_mask);
+
+    Announcement_time = round(CHO_time ./ 5) .* 5;
+    Announcement_time = Announcement_time(Announcement_mask);
+    Announcements = [0, 0];
+
+    for meal_idx = 1:length(Announcement_time)
+        Announcements = [Announcements; [
+            Announcement_time(meal_idx)-1, 0;
+            Announcement_time(meal_idx), Announcement_data(meal_idx);
+            Announcement_time(meal_idx)+4, Announcement_data(meal_idx);
+            Announcement_time(meal_idx)+5, 0;
+        ]];
     end
 
+    Announcements = [Announcements; 5 * 1440, 0];
+
+    bolus_data = [0, 0; 1e6, 0];
     glucagon_data = [0, 0; 1e6, 0];
 end
 

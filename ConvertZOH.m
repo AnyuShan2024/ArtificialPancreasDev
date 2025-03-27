@@ -14,37 +14,23 @@ end
 % Sort inputs by time
 [t_sorted, sort_indices] = sort(t);
 x_sorted = x(sort_indices);
+t_sorted = round(t_sorted./T)*T;
 
 % Determine the range of time
 t_start = 0; % ZOH starts counting from 0
 t_end = max(t_sorted);
 
-% Generate ZOH-aligned time points
-zohTimes = t_start:T:t_end; % ZOH time points
-zohValues = zeros(size(zohTimes)); % Initialize ZOH values to 0
+zohData = [0,0];
 
-% Process each T-interval
-for i = 1:length(zohTimes)
-    % Define the current T-interval
-    t_start_interval = zohTimes(i);
-    t_end_interval = t_start_interval + T;
-    
-    % Find indices of t_sorted within this interval
-    indices = find(t_sorted >= t_start_interval & t_sorted < t_end_interval);
-    
-    % Sum the corresponding x values for this interval
-    if ~isempty(indices)
-        zohValues(i) = sum(x_sorted(indices));
-    else
-        zohValues(i) = 0; % Explicitly set to 0 if no values exist
-    end
+for data_idx = 1:length(t_sorted)
+    zohData = [zohData; [
+        t_sorted(data_idx)-1,0;
+        t_sorted(data_idx), x_sorted(data_idx)/T;
+        t_sorted(data_idx)+T-1, x_sorted(data_idx)/T;
+        t_sorted(data_idx)+T, 0
+    ]];
 end
 
-% Append an extra row with time incremented by T and value 0
-zohTimes = [zohTimes, zohTimes(end) + T, zohTimes(end) + 2*T];
-zohValues = [zohValues, 0, 0];
-
-% Combine ZOH times and values into output matrix
-zohData = [zohTimes', zohValues'/T];
+zohData = [zohData; 5*1440,0];
 
 end

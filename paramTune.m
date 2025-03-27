@@ -57,14 +57,6 @@ function loss = loss_evaluate(model_name, param_names, param_values)
 end
 
 function loss = compute_loss(glucose_values)
-    % Computes simple penalty loss based on min and max glucose values
-    %
-    % Input:
-    %   glucose_values - Vector of glucose readings (mg/dL)
-    %
-    % Output:
-    %   loss - Penalty function based on min and max glucose
-
     % Step 1: Remove invalid glucose values
     valid_glucose = glucose_values(~isnan(glucose_values) & glucose_values > 0);
     
@@ -74,15 +66,14 @@ function loss = compute_loss(glucose_values)
         return;
     end
 
-    % Step 2: Get min and max glucose
-    G_min = min(valid_glucose);
-    G_max = max(valid_glucose);
+    % Step 2: Define penalty weights
+    alpha = 1;  % Weight for mild hypoglycemia penalty
+    beta = 5/6;   % Weight for mild hyperglycemia penalty
 
-    % Step 3: Compute penalty loss
-    alpha = 1.0;  % Weight for hypoglycemia penalty
-    beta = 0.8;   % Weight for hyperglycemia penalty
-    loss = alpha * max(70 - G_min, 0) + beta * max(G_max - 180, 0);
+    % Step 3: Compute penalties for each valid glucose value
+    hypo_penalty = alpha * (max(70 - valid_glucose, 0)).^2;
+    hyper_penalty = beta * max(valid_glucose - 180, 0);
 
-    % Print results for debugging
-    fprintf('Min Glucose: %.2f, Max Glucose: %.2f, Loss: %.2f\n', G_min, G_max, loss);
+    % Step 4: Compute mean loss
+    loss = mean(hypo_penalty + hyper_penalty);
 end

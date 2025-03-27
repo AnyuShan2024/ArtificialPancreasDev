@@ -59,7 +59,7 @@ K_i_ins = 0;
 
 glucagon_dose = 1e7; 
 
-K_d_glu = 50; 
+K_d_glu = 2; 
 K_p_glu = 0.1; 
 K_i_glu = 0; 
 

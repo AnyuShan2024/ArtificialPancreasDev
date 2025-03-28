@@ -1,6 +1,5 @@
 clear;
 clc;
-test = 10;
 
 %% ===== Simulation Setup =====
 

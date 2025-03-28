@@ -1,5 +1,5 @@
 function best_params = paramTune(model_name, param_names, param_bounds)
-    % Optimize multiple Simulink parameters using Genetic Algorithm (GA) with Fast Restart
+    % Optimize multiple Simulink parameters using Bayesian Optimization (noise-robust)
     %
     % Inputs:
     %   model_name  - Simulink model name (string)
@@ -13,22 +13,52 @@ function best_params = paramTune(model_name, param_names, param_bounds)
     load_system(model_name);
     set_param(model_name, 'FastRestart', 'on');
 
-    % Define cost function
-    cost_function = @(params) loss_evaluate(model_name, param_names, params);
-
-    % Set optimization options
-    options = optimoptions('ga', 'Display', 'iter', 'PopulationSize', 20);
-
-    % Run Genetic Algorithm optimizer
+    % Create optimizable variables
     num_params = length(param_names);
-    best_params = ga(cost_function, num_params, [], [], [], [], ...
-                     param_bounds(1, :), param_bounds(2, :), [], options);
+    opt_vars = optimizableVariable.empty;
+    max_evals = 1000;
+
+    for i = 1:num_params
+        opt_vars(i) = optimizableVariable(param_names{i}, ...
+            [param_bounds(1, i), param_bounds(2, i)]);
+    end
+
+    % Define the Bayesian optimization objective
+    objective = @(x) wrapper_loss(model_name, param_names, x);
+
+    % Run Bayesian optimization
+    results = bayesopt(objective, opt_vars, ...
+        'IsObjectiveDeterministic', false, ...
+        'MaxObjectiveEvaluations', 50, ...
+        'AcquisitionFunctionName', 'expected-improvement-plus', ...
+        'Verbose', 1, ...
+        'MaxObjectiveEvaluations', max_evals, ...
+        'PlotFcn', {@plotObjectiveModel});
+
+    % Extract the best parameters
+    bestTable = results.XAtMinObjective;
+    best_params = zeros(1, num_params);
+    for i = 1:num_params
+        best_params(i) = bestTable.(param_names{i});
+    end
 
     % Disable Fast Restart and close model
     set_param(model_name, 'FastRestart', 'off');
     close_system(model_name, 0);
 
     fprintf('Optimal parameters: %s = %s\n', strjoin(param_names, ', '), mat2str(best_params));
+end
+
+function loss = wrapper_loss(model_name, param_names, param_table)
+    % Convert param_table to vector
+    num_params = length(param_names);
+    param_values = zeros(1, num_params);
+    for i = 1:num_params
+        param_values(i) = param_table.(param_names{i});
+    end
+
+    % Evaluate the loss
+    loss = loss_evaluate(model_name, param_names, param_values);
 end
 
 
@@ -43,17 +73,22 @@ function loss = loss_evaluate(model_name, param_names, param_values)
     % Output:
     %   loss - LBGI + HBGI loss value
 
-    % Set each parameter in Simulink
-    baseWrite(param_values, param_names)
+    loss = 0;
 
-    % Run simulation
-    simOut = sim(model_name, 'ReturnWorkspaceOutputs', 'on');
-
-    % Extract glucose data (assuming glucose is logged as 'glucose_signal')
-    glucose_values = simOut.get('real_bg').Data;
-
-    % Compute LBGI + HBGI loss
-    loss = compute_loss(glucose_values);
+    for i = 1:5
+        % Set each parameter in Simulink
+        evalin('base', 'init')
+        baseWrite(param_values, param_names)
+    
+        % Run simulation
+        simOut = sim(model_name, 'ReturnWorkspaceOutputs', 'on');
+    
+        % Extract glucose data (assuming glucose is logged as 'glucose_signal')
+        glucose_values = simOut.get('real_bg').Data;
+    
+        % Compute LBGI + HBGI loss
+        loss = loss + compute_loss(glucose_values);
+    end
 end
 
 function loss = compute_loss(glucose_values)

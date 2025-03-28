@@ -67,13 +67,10 @@ K_i_glu = 0;
 
 % control_flag turns on / off the random meal inputs 
 % prandial flag is related to the bolus data which is disconnected 
-<<<<<<< HEAD
 control_flag = true;
 announcement_ratio = 0.8;
-=======
 control_flag = false;
 announcement_ratio = 0.5;
->>>>>>> 1a3bc3abb73a8fcaa27aa740455f781fbca93c88
 announcement_std = 3;
 
 %========== Pharmokinetics test run: =============================

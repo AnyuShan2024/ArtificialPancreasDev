@@ -79,7 +79,7 @@ test_flag = true;
 if test_flag == true
     t_sim = 1800; 
     bolus_data = ConvertZOH([120], [80/ICR*1e3], 1); 
-    glucagon_data = ConvertZOH([180], [5e7], 1); 
+    glucagon_data = ConvertZOH([240], [5e7], 1); 
     CHO_data = [0,0]; 
     Announcements = zeros(2); 
 

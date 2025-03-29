@@ -1,5 +1,5 @@
-% clear;
-% clc;
+clear;
+clc;
 test = 10;
 
 %% ===== Simulation Setup =====
@@ -7,7 +7,7 @@ test = 10;
 % Definition of session time
 
 start_time = datetime(2025, 1, 21, 0, 30, 0); % Format: year, month, day, hour, minute, second
-end_time = datetime(2025, 1, 26, 0, 30, 0);  % Example: Same day, different time
+end_time = datetime(2025, 1, 22, 0, 30, 0);  % Example: Same day, different time
 
 % Calculate the duration between the times
 t_sim = minutes(end_time - start_time);
@@ -67,14 +67,12 @@ K_i_glu = 0;
 
 % control_flag turns on / off the random meal inputs 
 % prandial flag is related to the bolus data which is disconnected 
-control_flag = true;
-announcement_ratio = 0.8;
 control_flag = false;
-announcement_ratio = 0.5;
-announcement_std = 3;
+announcement_ratio = 1.0;
+announcement_std = 10;
 
 %========== Pharmokinetics test run: =============================
-test_flag = true;
+test_flag = false;
 
 if test_flag == true
     t_sim = 1800; 

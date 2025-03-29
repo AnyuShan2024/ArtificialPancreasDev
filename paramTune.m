@@ -16,7 +16,7 @@ function best_params = paramTune(model_name, param_names, param_bounds)
     % Create optimizable variables
     num_params = length(param_names);
     opt_vars = optimizableVariable.empty;
-    max_evals = 1000;
+    max_evals = 500;
 
     for i = 1:num_params
         opt_vars(i) = optimizableVariable(param_names{i}, ...

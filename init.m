@@ -67,11 +67,25 @@ K_i_glu = 0;
 
 % control_flag turns on / off the random meal inputs 
 % prandial flag is related to the bolus data which is disconnected 
+control_flag = true;
+announcement_ratio = 0.8;
 control_flag = false;
 announcement_ratio = 0.5;
 announcement_std = 3;
 
-if control_flag
+%========== Pharmokinetics test run: =============================
+test_flag = true;
+
+if test_flag == true
+    t_sim = 1800; 
+    bolus_data = ConvertZOH([120], [80/ICR*1e3], 1); 
+    glucagon_data = ConvertZOH([240], [5e7], 1); 
+    CHO_data = [0,0]; 
+    Announcements = zeros(2); 
+
+%=================================================================
+
+elseif control_flag == true
     t_sim = 1800;
 
     % insulin dosage are all given in mU

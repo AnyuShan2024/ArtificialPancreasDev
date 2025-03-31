@@ -95,10 +95,20 @@ K_i_glu = 0;
 
 Announcements = zeros(2);
 
-%% ===== Loop Time =====
-
-blood_glucose = zeros(length(time_delay), 1+(t_sim/T_CGM)); 
+blood_glucose = zeros(length(time_delay)+1, 1+(t_sim/T_CGM)); %extra row for control test, extra column to include t=0
 blood_insulin = blood_glucose; 
+
+%% ===== Run Control =====
+
+ins_injection_time = 400; 
+bolus_data = ConvertZOH([ins_injection_time], [80/ICR*1e3], 1); 
+glucagon_data = ConvertZOH([1], [0], [1]); 
+
+simOut = sim(model_name, 'ReturnWorkspaceOutputs', 'on'); 
+blood_glucose(1,:) = transpose(simOut.get('BG_data'));
+blood_insulin(1,:) = transpose(simOut.get('total_insulin')); 
+
+%% ===== Loop Time =====
 
 for i = 1:length(time_delay)    
     fprintf('=== Investigating time delay index %d ===\n', i);

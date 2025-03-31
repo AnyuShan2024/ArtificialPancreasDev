@@ -19,7 +19,7 @@ BG_0 = 120;             % Initial condition for blood glucose level (mg/dL)
 
 %% ===== Loop Setup =====
 
-time_delay = 30:30:600; 
+time_delay = 30:60:300; 
 
 
 %% ===== Evaluator Settings =====
@@ -95,13 +95,13 @@ K_i_glu = 0;
 
 Announcements = zeros(2);
 
-blood_glucose = zeros(length(time_delay)+1, 1+(t_sim/T_CGM)); %extra row for control test, extra column to include t=0
+blood_glucose = zeros(length(time_delay)+1, 1+(t_sim/T_CGM)); % extra column to include t=0, extra row for control
 blood_insulin = blood_glucose; 
 
-%% ===== Run Control =====
+%% ===== Run Control Test =====
 
 ins_injection_time = 400; 
-bolus_data = ConvertZOH([ins_injection_time], [80/ICR*1e3], 1); 
+bolus_data = ConvertZOH([ins_injection_time], [10/ICR*1e3], 1); 
 glucagon_data = ConvertZOH([1], [0], [1]); 
 
 simOut = sim(model_name, 'ReturnWorkspaceOutputs', 'on'); 
@@ -116,7 +116,7 @@ for i = 1:length(time_delay)
     ins_injection_time = 400; 
     glu_injection_time = ins_injection_time + time_delay(i); 
 
-    bolus_data = ConvertZOH([ins_injection_time], [80/ICR*1e3], 1); 
+    bolus_data = ConvertZOH([ins_injection_time], [10/ICR*1e3], 1); 
     glucagon_data = ConvertZOH([glu_injection_time], [5e7], 1);
 
 %% ===== Run Simulation =====
@@ -124,8 +124,8 @@ for i = 1:length(time_delay)
         simOut = sim(model_name, 'ReturnWorkspaceOutputs', 'on');
     
         % Extract glucose data
-        blood_glucose(i,:) = transpose(simOut.get('BG_data')); 
-        blood_insulin(i,:) = transpose(simOut.get('total_insulin')); 
+        blood_glucose(i+1,:) = transpose(simOut.get('BG_data')); 
+        blood_insulin(i+1,:) = transpose(simOut.get('total_insulin')); 
 
 end 
 

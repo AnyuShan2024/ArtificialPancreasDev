@@ -46,4 +46,12 @@ plot(delta_ins, delta_bg)
 xlabel('estimated blood insulin (?)')
 ylabel('Blood glucose (mg/dL)')
 title('Insulin level in blood vs effectiveness')
+hold off 
+
+%% ==== Validation ====
+figure 
+time = 0:5:1440; 
+plot(time, BG_array(1,:))
+hold on 
+plot(time, BG_array(end,:))
 

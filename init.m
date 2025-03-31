@@ -78,8 +78,11 @@ if test_flag == true
 
     % dosages 
     t_sim = 1800; 
-    bolus_data = ConvertZOH([120], [80/ICR*1e3], 1); 
-    glucagon_data = ConvertZOH([240], [5e7], 1); 
+    ins_injection_time = 400; 
+    glu_injection_time = 400; 
+    
+    bolus_data = ConvertZOH([ins_injection_time], [80/ICR*1e3], 1); 
+    glucagon_data = ConvertZOH([glu_injection_time], [0], 1); 
     CHO_data = [0,0]; 
     Announcements = zeros(2); 
 

@@ -19,7 +19,7 @@ BG_0 = 120;             % Initial condition for blood glucose level (mg/dL)
 
 %% ===== Loop Setup =====
 
-time_delay = 30:30:1200; 
+time_delay = 30:30:90; 
 
 
 %% ===== Evaluator Settings =====
@@ -115,7 +115,7 @@ for i = 1:length(time_delay)
     
         % Extract glucose data
         blood_glucose(i,:) = transpose(simOut.get('BG_data')); 
-        blood_insulin(i,:) = transpose(simOUt.get('total_insulin')); 
+        blood_insulin(i,:) = transpose(simOut.get('total_insulin')); 
 
 end 
 

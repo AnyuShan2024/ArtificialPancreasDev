@@ -19,7 +19,7 @@ BG_0 = 120;             % Initial condition for blood glucose level (mg/dL)
 
 %% ===== Loop Setup =====
 
-time_delay = 30:60:300; 
+time_delay = 30:30:600; 
 
 
 %% ===== Evaluator Settings =====

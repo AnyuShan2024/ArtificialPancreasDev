@@ -43,7 +43,7 @@ title('Time offset of injections vs effctiveness')
 
 nexttile
 plot(delta_ins, delta_bg)
-xlabel('estimated blood insulin (?)')
+xlabel('estimated blood insulin (units?)')
 ylabel('Blood glucose (mg/dL)')
 title('Insulin level in blood vs effectiveness')
 hold off 

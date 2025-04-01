@@ -14,7 +14,7 @@ control = BG_array(1,:);
 %% ==== Loop for all tests ====
 
 delta_bg = zeros(length(time_delay),1); %store the difference between control and glucagon test
-delta_ins = delta_bg;                 %store the blood insulin at the same time (not the difference) 
+delta_ins = delta_bg;                   %store the blood insulin at the same time (not the difference) 
 
 for i = 1:length(time_delay)
 
@@ -34,6 +34,8 @@ for i = 1:length(time_delay)
 
 end 
 
+%% ==== Plot the data ====
+
 tiledlayout(2,1)
 nexttile
 plot(time_delay, delta_bg)
@@ -48,7 +50,7 @@ ylabel('Blood glucose (mg/dL)')
 title('Insulin level in blood vs effectiveness')
 hold off 
 
-%% ==== Validation ====
+%% ==== Validation Tests ====
 figure 
 time = 0:5:1440; 
 plot(time, BG_array(1,:))

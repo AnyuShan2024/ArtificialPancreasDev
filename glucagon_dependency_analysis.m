@@ -38,13 +38,13 @@ end
 
 tiledlayout(2,1)
 nexttile
-plot(time_delay, delta_bg)
+plot(time_delay, delta_bg, '+')
 xlabel('time delay (mins)')
 ylabel('Blood glucose (mg/dL)')
 title('Time offset of injections vs effctiveness')
 
 nexttile
-plot(delta_ins, delta_bg)
+plot(delta_ins, delta_bg, '+')
 xlabel('estimated blood insulin (units?)')
 ylabel('Blood glucose (mg/dL)')
 title('Insulin level in blood vs effectiveness')
@@ -56,4 +56,18 @@ time = 0:5:1440;
 plot(time, BG_array(1,:))
 hold on 
 plot(time, BG_array(end,:))
+hold off 
+%% ==== Trend fitting ====
 
+% remove data point corresponding to glucagon 'beating' insulin to peak
+% translate the data to allow for more accurate curve fitting 
+delta_bg_clean = delta_bg(2:end) - 72;      % from observing the data 
+delta_ins_clean = delta_ins(2:end) - 600;   % from observing the data 
+
+%fit exponential decay 
+f = fit(delta_ins_clean, delta_bg_clean, 'exp1'); 
+a = f.a; b = f.b;
+y = a.*(exp(b.*(delta_ins_clean)));  
+plot(delta_ins_clean, delta_bg_clean, '+')
+hold on 
+plot(delta_ins_clean, y)

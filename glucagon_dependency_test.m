@@ -4,6 +4,7 @@ model_name = 'SimBG';
 
 load_system(model_name);
 set_param(model_name, 'FastRestart', 'on');
+set_param('SimBG/Controller/Constant1', 'Value', '1' )
 
 % Constants for patient simulation loaded here
 W = 70;                 % Body weigh of patient (kg)
@@ -16,9 +17,9 @@ BG_0 = 120;             % Initial condition for blood glucose level (mg/dL)
 % choose which test to run
 test_flag = true;               % no carb input + impulse of insulin and glucagon
 control_flag = false;           % input bolus and glucagon data manually
-mean_flag = false;               % use mean of all 16 patients for parameters 
+mean_flag = true;               % use mean of all 16 patients for parameters 
 
-time_delay = 30:30:600;         % if test_flag = true, set range of glucagon injection delay times
+time_delay = 30:30:800;         % if test_flag = true, set range of glucagon injection delay times
 
 %% ===== Evaluator, start time, CGM and Safety values =====
 

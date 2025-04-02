@@ -72,7 +72,7 @@ announcement_ratio = 1.0;
 announcement_std = 10;
 
 %========== Pharmokinetics test run: =============================
-test_flag = true;
+test_flag = false;
 
 if test_flag == true
 
@@ -81,7 +81,7 @@ if test_flag == true
     ins_injection_time = 400; 
     glu_injection_time = 400; 
     
-    bolus_data = ConvertZOH([ins_injection_time], [80/ICR*1e3], 1); 
+    bolus_data = ConvertZOH([ins_injection_time], [10/ICR*1e3], 1); 
     glucagon_data = ConvertZOH([glu_injection_time], [0], 1); 
     CHO_data = [0,0]; 
     Announcements = zeros(2); 

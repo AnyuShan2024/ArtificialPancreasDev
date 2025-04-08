@@ -79,7 +79,7 @@ if test_flag == true
     % dosages 
     t_sim = 1800; 
     ins_injection_time = 400; 
-    glu_injection_time = 400; 
+    glu_injection_time = 500; 
     
     bolus_data = ConvertZOH([ins_injection_time], [10/ICR*1e3], 1); 
     glucagon_data = ConvertZOH([glu_injection_time], [0], 1); 

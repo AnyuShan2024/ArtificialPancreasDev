@@ -24,6 +24,7 @@ W = 70;                 % Body weigh of patient (kg)
 M_g = 180.16;           % Molecular weight of glucose (g mol^{-1})
 G_GNG = 6;              % Glucose production due to gluconeogenesis (umol/kg/min)
 BG_0 = 120;             % Initial condition for blood glucose level (mg/dL)
+K_clear = 0.0143;       % Insulin clearance coefficient  
 
 % Read from virtual patient presets and load
 dirVP = 'presets\virtual_patients.mat';

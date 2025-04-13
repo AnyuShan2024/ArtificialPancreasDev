@@ -67,6 +67,10 @@ delta_ins_clean = delta_ins(2:end) - 600;   % from observing the data
 %fit exponential decay 
 f = fit(delta_ins_clean, delta_bg_clean, 'exp1'); 
 a = f.a; b = f.b;
+disp('a=')
+disp(a)
+disp('b=')
+disp(b)
 y = a.*(exp(b.*(delta_ins_clean)));  
 plot(delta_ins_clean, delta_bg_clean, '+')
 hold on 

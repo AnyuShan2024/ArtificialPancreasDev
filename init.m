@@ -24,6 +24,7 @@ W = 70;                 % Body weigh of patient (kg)
 M_g = 180.16;           % Molecular weight of glucose (g mol^{-1})
 G_GNG = 6;              % Glucose production due to gluconeogenesis (umol/kg/min)
 BG_0 = 120;             % Initial condition for blood glucose level (mg/dL)
+K_clear = 0.0143;       % Insulin clearance coefficient  
 
 % Read from virtual patient presets and load
 dirVP = 'presets\virtual_patients.mat';
@@ -78,8 +79,11 @@ test_flag = true;
 
 if test_flag == true
     t_sim = 1800; 
-    bolus_data = ConvertZOH([120], [80/ICR*1e3], 1); 
-    glucagon_data = ConvertZOH([240], [5e7], 1); 
+    ins_injection_time = 400; 
+    glu_injection_time = 500; 
+    
+    bolus_data = ConvertZOH([ins_injection_time], [10/ICR*1e3], 1); 
+    glucagon_data = ConvertZOH([glu_injection_time], [0], 1); 
     CHO_data = [0,0]; 
     Announcements = zeros(2); 
 

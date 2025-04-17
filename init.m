@@ -87,6 +87,26 @@ if test_flag == true
     CHO_data = [0,0]; 
     Announcements = zeros(2); 
 
+      % patients
+    data = load(dirVP); 
+    patient_data = data.param_matrix; 
+    num_var = size(patient_data); 
+    columns = num_var(2); 
+
+    avg_patient = zeros(1,columns); 
+
+    for i = 1:columns
+        avg_patient(i) = mean(patient_data(:,i)); %take the mean values from all 16 patients 
+    end 
+
+baseWrite(avg_patient, data.param_names)          %assign this data to variables in workspace
+
+% Solve for basal insulin required to maintain steady-state blood glucose
+G_GG0 = C_b/(C_b+C_E50)*(E_max-G_GNG);
+f = @(x) -F_01 - x/(k_e*V_I*W)*S_T*(1-k_12/(k_12+x/(k_e*V_I*W)*S_D))*(BG_0*V_G/18)+G_GG0+G_GNG;
+U_b0 = fzero(f, 10);
+
+basal_data = [0, U_b0; 1440*5, U_b0];
 %=================================================================
 
 elseif control_flag == true

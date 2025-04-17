@@ -1,5 +1,5 @@
-clear;
-clc;
+% clear;
+% clc;
 test = 10;
 
 %% ===== Simulation Setup =====
@@ -7,7 +7,7 @@ test = 10;
 % Definition of session time
 
 start_time = datetime(2025, 1, 21, 0, 30, 0); % Format: year, month, day, hour, minute, second
-end_time = datetime(2025, 1, 22, 0, 30, 0);  % Example: Same day, different time
+end_time = datetime(2025, 1, 26, 0, 30, 0);  % Example: Same day, different time
 
 % Calculate the duration between the times
 t_sim = minutes(end_time - start_time);
@@ -60,24 +60,24 @@ K_i_ins = 0;
 
 glucagon_dose = 1e7; 
 
-K_d_glu = 1; 
-K_p_glu = 0.1; 
+K_d_glu = 2.484; 
+K_p_glu = 0.10976; 
 K_i_glu = 0; 
 
 %% ===== Input Definition =====
 
 % control_flag turns on / off the random meal inputs 
 % prandial flag is related to the bolus data which is disconnected 
+control_flag = true;
+announcement_ratio = 0.8;
 control_flag = false;
-announcement_ratio = 1.0;
-announcement_std = 10;
+announcement_ratio = 0.5;
+announcement_std = 3;
 
 %========== Pharmokinetics test run: =============================
-test_flag = false;
+test_flag = true;
 
 if test_flag == true
-
-    % dosages 
     t_sim = 1800; 
     ins_injection_time = 400; 
     glu_injection_time = 500; 
@@ -86,27 +86,6 @@ if test_flag == true
     glucagon_data = ConvertZOH([glu_injection_time], [0], 1); 
     CHO_data = [0,0]; 
     Announcements = zeros(2); 
-
-    % patients
-    data = load(dirVP); 
-    patient_data = data.param_matrix; 
-    num_var = size(patient_data); 
-    columns = num_var(2); 
-
-    avg_patient = zeros(1,columns); 
-
-    for i = 1:columns
-        avg_patient(i) = mean(patient_data(:,i)); %take the mean values from all 16 patients 
-    end 
-
-baseWrite(avg_patient, data.param_names)          %assign this data to variables in workspace
-
-% Solve for basal insulin required to maintain steady-state blood glucose
-G_GG0 = C_b/(C_b+C_E50)*(E_max-G_GNG);
-f = @(x) -F_01 - x/(k_e*V_I*W)*S_T*(1-k_12/(k_12+x/(k_e*V_I*W)*S_D))*(BG_0*V_G/18)+G_GG0+G_GNG;
-U_b0 = fzero(f, 10);
-
-basal_data = [0, U_b0; 1440*5, U_b0];
 
 %=================================================================
 

@@ -75,7 +75,7 @@ function loss = loss_evaluate(model_name, param_names, param_values)
 
     loss = 0;
 
-    for i = 1:1
+    for i = 1:5
         % Set each parameter in Simulink
         evalin('base', 'init')
         baseWrite(param_values, param_names)

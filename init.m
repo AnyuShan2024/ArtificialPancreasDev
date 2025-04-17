@@ -78,12 +78,13 @@ announcement_std = 3;
 test_flag = true;
 
 if test_flag == true
+    
     t_sim = 1800; 
     ins_injection_time = 400; 
     glu_injection_time = 500; 
     
     bolus_data = ConvertZOH([ins_injection_time], [10/ICR*1e3], 1); 
-    glucagon_data = ConvertZOH([glu_injection_time], [0], 1); 
+    glucagon_data = ConvertZOH([glu_injection_time], [5e7], 1); 
     CHO_data = [0,0]; 
     Announcements = zeros(2); 
 

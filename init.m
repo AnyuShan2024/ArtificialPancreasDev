@@ -7,7 +7,7 @@ test = 10;
 % Definition of session time
 
 start_time = datetime(2025, 1, 21, 0, 30, 0); % Format: year, month, day, hour, minute, second
-end_time = datetime(2025, 1, 26, 0, 30, 0);  % Example: Same day, different time
+end_time = datetime(2025, 1, 22, 0, 30, 0);  % Example: Same day, different time
 
 % Calculate the duration between the times
 t_sim = minutes(end_time - start_time);
@@ -64,6 +64,8 @@ K_d_glu = 2.484;
 K_p_glu = 0.10976; 
 K_i_glu = 0; 
 
+m_prep = 20;
+
 %% ===== Input Definition =====
 
 % control_flag turns on / off the random meal inputs 
@@ -73,9 +75,12 @@ announcement_ratio = 0.8;
 control_flag = false;
 announcement_ratio = 0.5;
 announcement_std = 3;
+meal_prep_flag = true;
 
 %========== Pharmokinetics test run: =============================
 test_flag = false;
+
+meal_prep = [0, 0; 1e6, 0];
 
 if test_flag == true
     
@@ -150,6 +155,22 @@ else
     end
 
     Announcements = [Announcements; 5 * 1440, 0];
+
+    if meal_prep_flag
+        meal_prep = [0, 0];
+
+        meal_prep_time = Announcement_time - 5*randi(6, length(Announcement_time), 1);
+        for meal_idx = 1:length(meal_prep_time)
+            meal_prep = [meal_prep; [
+                meal_prep_time(meal_idx)-1, 0;
+                meal_prep_time(meal_idx), 1;
+                meal_prep_time(meal_idx)+4, 1;
+                meal_prep_time(meal_idx)+5, 0;
+            ]];
+        end
+
+        meal_prep = [meal_prep; 5 * 1440, 0];
+    end
 
     bolus_data = [0, 0; 1e6, 0];
     glucagon_data = [0, 0; 1e6, 0];

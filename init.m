@@ -66,37 +66,6 @@ K_i_glu = 0;
 
 m_prep = 20;
 
-%% ===== MPC Parameters =====
-% Define system and cost parameters
-A_statespace = [...
-    0.0038,  433.12, 433.12, 0,      0,       0,       0.588,  0,      0,        0,       0;
-    0,      -0.017,  0,      0,      0,       0,       0,      0,      2.34e-6,  0 ,      0;
-    0,       0,     -0.012,  9.276e-6, 0,     0,       0,      0,      0,        0,        0;
-    0,       0,      0,     -0.196,   0,       0.0008718, 0,    0,      0,        0 ,      0;
-    0,       0,      0,      0,      -0.01839, 0,       0,      0,      0,        0 ,      0;
-    0,       0,      0,      0,       0.01839, -0.01839, 0,     0,      0,        0 ,      0;
-    0,       0,      0,      0,       0,      0,      -0.0143, 0,      0,        0 ,      0;
-    0,       0,      0,      0,       0,      0        0.0143,  -0.0143, 0,      0,        0;
-    0,       0,      0,      0,       0,      0,       0,     0,         0.62,     0,       0.0019;
-    0,       0,      0,      0,       0,      0,       0,    0, 0,      -0.3008,   0;
-    0,       0,      0,      0,       0,      0,       0,     0,0,0.3008,  -0.3008
-];      % (nx x nx)
-B_statespace= [0 0;0 0;0 0;1 0;0 0;0 0;0 0;0 0;0 1;0 0;0 0];  % (nx x nu)
-nx = size(A_statespace,1); % num of states
-nu = size(B_statespace,2); % num of inputs
-Q = diag([30000, 0, 0, 0,0,0,0,0,0,0,0]); % State cost (glucose more important)      % (nx x nx)
-R = [8,2;2,100].*10000; % Control cost (insulin/glucagon effort)      % (nu x nu)
-c = 5e7;      % penalty scalar
-Gr = 100;     % glucose reference
-x0 = zeros(nx,1);     % current state (nx x 1)
-xr = zeros(nx,1);     % reference state (nx x 1)
-xr(1,1) = Gr;
-ur = zeros(nu,1);     % reference input (nu x 1)
-N = 12;      % prediction horizon
-Ts = 5;    %sampling period
-A_MPC = A_statespace.*Ts + 1;
-B_MPC = B_statespace.*Ts;
-
 
 
 %% ===== Input Definition =====
@@ -105,7 +74,7 @@ B_MPC = B_statespace.*Ts;
 % prandial flag is related to the bolus data which is disconnected 
 control_flag = false;
 announcement_ratio = 0.8;
-control_flag = true;
+control_flag = false;
 announcement_ratio = 0.5;
 announcement_std = 3;
 meal_prep_flag = true;

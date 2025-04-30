@@ -139,7 +139,9 @@ else
 
     % Corrupt CHO amount with announcement error and possibility of
     % unannouced meal.
-    Announcement_data = max(0, CHO_amount+announcement_std*randn(size(CHO_amount)));
+    %Announcement_data = max(0, CHO_amount+announcement_std*randn(size(CHO_amount)));
+    Announcement_data = max(0, CHO_amount.*(1+0.26*randn(size(CHO_amount))));
+
     Announcement_mask = rand(size(Announcement_data))<announcement_ratio;
     Announcement_data = Announcement_data(Announcement_mask);
 

@@ -38,16 +38,17 @@ end
 
 tiledlayout(2,1)
 nexttile
-plot(time_delay, delta_bg, '+')
+plot(time_delay, delta_bg)
 xlabel('time delay (mins)')
 ylabel('Blood glucose (mg/dL)')
 title('Time offset of injections vs effctiveness')
 
 nexttile
-plot(delta_ins, delta_bg, '+')
-xlabel('estimated blood insulin (units?)')
+plot(delta_ins, delta_bg)
+xlabel('estimated blood insulin (mU)')
 ylabel('Blood glucose (mg/dL)')
 title('Insulin level in blood vs effectiveness')
+legend('(mU)')
 hold off 
 
 %% ==== Validation Tests ====

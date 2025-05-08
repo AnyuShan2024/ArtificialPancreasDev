@@ -1,5 +1,5 @@
 % store output bg data
-BG = out.BG_data; 
+%BG = out.BG_data; 
 t = 1:5:5*length(BG);
 
 % Figure setting
@@ -18,9 +18,9 @@ set(gca,'FontSize',9,'FontName','times')
 
 hold on
 
-plot(t, BG,'k-','LineWidth',2)
+plot(out.simout.time, out.simout.data*18,'k-','LineWidth',2)
 plot(t, 70 * ones(size(t)),'r-','LineWidth',2)
-plot(t, 250 * ones(size(t)),'b-','LineWidth',2)
+plot(t, 180 * ones(size(t)),'b-','LineWidth',2)
 
 xlabel('time(s)')
 ylabel('BG(mg/dl)')

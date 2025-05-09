@@ -1,5 +1,4 @@
 clear; 
-clc; 
 %% ===== Simulator Setup =====
 
 model_name = 'SimBG'; % Replace with your actual Simulink model name
@@ -22,7 +21,7 @@ K_clear = 0.0143;       % Insulin clearance coefficient
 % Definition of session time
 
 start_time = datetime(2025, 1, 21, 0, 30, 0); % Format: year, month, day, hour, minute, second
-end_time = datetime(2025, 1, 22, 0, 30, 0);  % Example: Same day, different time
+end_time = datetime(2025, 1, 28, 0, 30, 0);  % Example: Same day, different time
 
 % Calculate the duration between the times
 t_sim = minutes(end_time - start_time);
@@ -33,7 +32,7 @@ control_flag = false;
 meal_prep_flag = true;
 
 %% ===== Loop Setup ====== 
-n_patients = 2; 
+n_patients = 16; 
 BG_data = zeros(n_patients, t_sim./T_CGM + 1); 
 %BG_data will store each BG trace together. The time will increase along
 %the columns, and the patient will be indexed by the row number - the test
@@ -78,7 +77,7 @@ for meal_idx = 1:length(Announcement_time)
     ]];
 end
 
-Announcements = [Announcements; 5 * 1440, 0];
+Announcements = [Announcements; 10 * 1440, 0];
 bolus_data = [0, 0; 1e6, 0];
 glucagon_data = [0, 0; 1e6, 0];
 

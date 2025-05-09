@@ -5,9 +5,14 @@ BG_traces = load('Test_data.mat');
 BG_values = BG_traces.BG_data; 
 [test_no,~] = size(BG_values); 
 
-TIR = zeros(test_no,1); 
+Eval_data = zeros(test_no, 4); 
 
 for i = 1:test_no
-    TIR(i) = evalGlucose(BG_values(i,:), 4); %4 selects TIR evaluation
+    for j = 1:4
+    Eval_data(i,j) = evalGlucose(BG_values(i,:), j); 
+    end 
 end 
-disp(TIR)
+disp(Eval_data)
+
+mean_TIR = mean(Eval_data(:,4)); 
+disp(mean_TIR)
